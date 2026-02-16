@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
     <title>⚠️ 系统紧急通知</title>
     <style>
+        /* ---------- 基础样式（与原版一致） ---------- */
         * {
             margin: 0;
             padding: 0;
@@ -24,6 +25,7 @@
             left: 0;
         }
 
+        /* 病毒层样式（与原版相同） */
         #virus-layer {
             position: absolute;
             top: 0;
@@ -203,6 +205,7 @@
         .w2 { bottom: 20%; right: 2%; transform: rotate(15deg); font-size: 32px; }
         .w3 { top: 70%; left: 60%; transform: rotate(5deg); }
 
+        /* ---------- 内容层（新结构） ---------- */
         #content-layer {
             position: absolute;
             top: 0;
@@ -213,20 +216,27 @@
             backdrop-filter: blur(8px);
             z-index: 100;
             display: none;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 20px;
             color: white;
         }
 
+        /* 第一阶段：表情包 */
+        #meme-stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
         .meme-container {
             background: #ffdd00;
             border-radius: 120px;
             padding: 25px 35px 20px 35px;
-            margin-bottom: 30px;
             box-shadow: 0 0 0 8px white, 0 30px 40px black;
-            transform: scale(1);
             animation: pop 0.4s cubic-bezier(0.18, 1.3, 0.6, 1);
         }
 
@@ -239,6 +249,28 @@
         .meme-svg {
             width: 200px;
             height: 200px;
+        }
+
+        /* 第二阶段：视频 + 祝词 */
+        #video-stage {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .greeting {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffd966;
+            text-shadow: 2px 2px 0 #b35100;
+            background: rgba(0,0,0,0.5);
+            padding: 10px 30px;
+            border-radius: 50px;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
         }
 
         .video-wrapper {
@@ -256,18 +288,6 @@
             height: auto;
             display: block;
             outline: none;
-        }
-
-        .hint-text {
-            margin-top: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #ffd966;
-            text-shadow: 2px 2px 0 #b35100;
-            background: rgba(0,0,0,0.5);
-            padding: 10px 30px;
-            border-radius: 50px;
-            letter-spacing: 2px;
         }
 
         .play-trigger {
@@ -301,7 +321,7 @@
 </head>
 <body>
 
-<!-- 病毒层：全屏覆盖，红色基调，疯狂抖动 -->
+<!-- 病毒层（与原版相同） -->
 <div id="virus-layer">
     <div class="fake-status-bar">
         <span>📶 5G · 满格</span>
@@ -309,12 +329,10 @@
         <span>🔋 1%</span>
     </div>
 
-    <!-- 漂浮警告文字 (中英混合) -->
     <div class="floating-warning w1">🚨 SYSTEM FAILURE</div>
     <div class="floating-warning w2">🔥 CPU 85°C</div>
     <div class="floating-warning w3">💀 KERNEL PANIC</div>
 
-    <!-- 仿系统弹窗1 - 主警告 -->
     <div class="virus-popup" style="width: 90%;">
         <div class="popup-header">
             <span class="icon">⚠️</span> <span>System Alert</span>
@@ -331,7 +349,6 @@
         </div>
     </div>
 
-    <!-- 随机定位的夸张弹窗2 - 温度警告 -->
     <div class="virus-popup dark popup-special1">
         <div class="popup-header">
             <span class="icon">🔥</span> <span>Thermal Warning</span>
@@ -343,7 +360,6 @@
         </div>
     </div>
 
-    <!-- 随机弹窗3 - 加密勒索 -->
     <div class="virus-popup popup-special2">
         <div class="popup-header">
             <span class="icon">🔒</span> <span>Ransomware Detected</span>
@@ -356,7 +372,6 @@
         </div>
     </div>
 
-    <!-- 随机弹窗4 - 内核崩溃 -->
     <div class="virus-popup popup-special3">
         <div class="popup-header">
             <span class="icon">💀</span> <span>KERNEL PANIC</span>
@@ -369,52 +384,46 @@
         </div>
     </div>
 
-    <!-- 假的扫描线 -->
     <div class="virus-scan-line"></div>
 
-    <!-- 底部假按钮区域 -->
     <div style="display: flex; gap: 10px; justify-content: center; margin-top: 30px;">
         <div style="background: #5a0000; padding: 10px 20px; border-radius: 10px; color: #ffa0a0; border: 1px solid red;">SCAN NOW</div>
         <div style="background: #5a0000; padding: 10px 20px; border-radius: 10px; color: #ffa0a0; border: 1px solid red;">IGNORE</div>
         <div style="background: #5a0000; padding: 10px 20px; border-radius: 10px; color: #ffa0a0; border: 1px solid red;">CLEAN</div>
     </div>
-
-    <!-- 隐藏提示: 其实点哪都能复活 -->
 </div>
 
-<!-- 内容层：表情包 + 视频 (先隐藏) -->
+<!-- 内容层（新结构） -->
 <div id="content-layer">
-    <div class="meme-container">
-        <!-- 内联SVG表情包：一个魔性笑脸+新年元素 -->
-        <svg class="meme-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <!-- 背景圆脸 -->
-            <circle cx="100" cy="100" r="85" fill="#FFDD44" stroke="#A0522D" stroke-width="6"/>
-            <!-- 左眼 -->
-            <circle cx="65" cy="80" r="18" fill="white" stroke="#8B4513" stroke-width="4"/>
-            <circle cx="70" cy="80" r="8" fill="#000000"/>
-            <!-- 右眼 -->
-            <circle cx="135" cy="80" r="18" fill="white" stroke="#8B4513" stroke-width="4"/>
-            <circle cx="130" cy="80" r="8" fill="#000000"/>
-            <!-- 大笑的嘴巴 (整蛊笑容) -->
-            <path d="M 65 135 Q 100 170, 135 135" stroke="#8B4513" stroke-width="8" fill="none" stroke-linecap="round"/>
-            <!-- 两撇小胡子，增加喜感 -->
-            <path d="M 45 105 Q 70 95, 80 105" stroke="#000000" stroke-width="5" fill="none"/>
-            <path d="M 120 105 Q 130 95, 155 105" stroke="#000000" stroke-width="5" fill="none"/>
-            <!-- 红色新年帽 -->
-            <path d="M 30 40 L 100 20 L 170 40 L 160 70 L 100 55 L 40 70 Z" fill="#FF3333" stroke="#B22222" stroke-width="4"/>
-            <circle cx="150" cy="40" r="12" fill="#FFD700" stroke="#B8860B" stroke-width="3"/>
-        </svg>
+    <!-- 第一阶段：只显示表情包 -->
+    <div id="meme-stage">
+        <div class="meme-container">
+            <svg class="meme-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="100" cy="100" r="85" fill="#FFDD44" stroke="#A0522D" stroke-width="6"/>
+                <circle cx="65" cy="80" r="18" fill="white" stroke="#8B4513" stroke-width="4"/>
+                <circle cx="70" cy="80" r="8" fill="#000000"/>
+                <circle cx="135" cy="80" r="18" fill="white" stroke="#8B4513" stroke-width="4"/>
+                <circle cx="130" cy="80" r="8" fill="#000000"/>
+                <path d="M 65 135 Q 100 170, 135 135" stroke="#8B4513" stroke-width="8" fill="none" stroke-linecap="round"/>
+                <path d="M 45 105 Q 70 95, 80 105" stroke="#000000" stroke-width="5" fill="none"/>
+                <path d="M 120 105 Q 130 95, 155 105" stroke="#000000" stroke-width="5" fill="none"/>
+                <path d="M 30 40 L 100 20 L 170 40 L 160 70 L 100 55 L 40 70 Z" fill="#FF3333" stroke="#B22222" stroke-width="4"/>
+                <circle cx="150" cy="40" r="12" fill="#FFD700" stroke="#B8860B" stroke-width="3"/>
+            </svg>
+        </div>
     </div>
-    <div class="video-wrapper">
-        <!-- 新年祝福视频：本地文件“恭喜发财MV.mp4”，与HTML同目录 -->
-        <video id="newyearVideo" preload="auto" playsinline webkit-playsinline muted="false" controls>
-            <source src="恭喜发财MV.mp4" type="video/mp4">
-            您的浏览器不支持视频标签，请升级浏览器。
-        </video>
+
+    <!-- 第二阶段：视频 + 祝词 -->
+    <div id="video-stage">
+        <div class="greeting">🧧 新年快乐 🧧</div>
+        <div class="video-wrapper">
+            <video id="newyearVideo" preload="auto" playsinline webkit-playsinline muted="false" controls>
+                <source src="恭喜发财MV.mp4" type="video/mp4">
+                您的浏览器不支持视频标签，请升级浏览器。
+            </video>
+        </div>
+        <button id="manualPlayBtn" class="play-trigger">▶ 播放祝福</button>
     </div>
-    <div class="hint-text">🎉 新年暴富 🎉</div>
-    <!-- 备用播放按钮 (如果自动播放被浏览器阻止) -->
-    <button id="manualPlayBtn" class="play-trigger">▶ 播放祝福</button>
 </div>
 
 <div class="credit">整蛊专用 · 点击任意病毒区域解救手机</div>
@@ -423,64 +432,92 @@
     (function() {
         const virusLayer = document.getElementById('virus-layer');
         const contentLayer = document.getElementById('content-layer');
+        const memeStage = document.getElementById('meme-stage');
+        const videoStage = document.getElementById('video-stage');
         const video = document.getElementById('newyearVideo');
         const manualBtn = document.getElementById('manualPlayBtn');
 
-        let isSwitched = false;
+        let isSwitched = false;          // 是否已点击进入内容层
+        let memeTimer = null;             // 表情包定时器
 
         if (navigator.vibrate) {
             navigator.vibrate([200, 100, 200]);
         }
 
-        function switchToContent() {
-            if (isSwitched) return;
-            isSwitched = true;
+        // 显示第二阶段（视频）
+        function showVideoStage() {
+            // 隐藏表情包阶段
+            memeStage.style.display = 'none';
+            // 显示视频阶段
+            videoStage.style.display = 'flex';
 
-            virusLayer.style.display = 'none';
-            contentLayer.style.display = 'flex';
-
+            // 尝试播放视频
             const playPromise = video.play();
-
             if (playPromise !== undefined) {
                 playPromise.catch(error => {
                     console.warn('自动播放失败，显示手动播放按钮', error);
                     manualBtn.style.display = 'block';
                 });
             }
-
-            manualBtn.onclick = function(e) {
-                e.stopPropagation();
-                video.play();
-                manualBtn.style.display = 'none';
-            };
-
-            video.onplay = function() {
-                if (manualBtn.style.display === 'block') {
-                    manualBtn.style.display = 'none';
-                }
-            };
         }
 
+        // 点击后第一阶段：显示表情包
+        function switchToMeme() {
+            if (isSwitched) return;
+            isSwitched = true;
+
+            // 隐藏病毒层，显示内容层
+            virusLayer.style.display = 'none';
+            contentLayer.style.display = 'flex';
+
+            // 确保第一阶段显示，第二阶段隐藏
+            memeStage.style.display = 'flex';
+            videoStage.style.display = 'none';
+
+            // 2秒后自动切换到视频阶段
+            memeTimer = setTimeout(() => {
+                showVideoStage();
+            }, 2000); // 2000毫秒 = 2秒
+        }
+
+        // 点击事件（任何位置点击病毒层即触发）
         document.addEventListener('click', function onClickAnywhere(e) {
             if (isSwitched) return;
-            switchToContent();
+            switchToMeme();
             document.removeEventListener('click', onClickAnywhere);
         }, { once: false });
 
+        // 4秒后自动救场（防止用户没点击）
         setTimeout(() => {
             if (!isSwitched) {
-                virusLayer.style.display = 'none';
-                contentLayer.style.display = 'flex';
-                isSwitched = true;
-                manualBtn.style.display = 'block';
-                if (navigator.vibrate) navigator.vibrate(100);
+                switchToMeme();
+                // 如果48秒后触发，也保留2秒后自动进视频的逻辑，但可能已经进视频了？
+                // 已经通过switchToMeme设置了定时器，无需额外处理
             }
-        }, 8000);
+        }, 4000);
+
+        // 手动播放按钮
+        manualBtn.onclick = function(e) {
+            e.stopPropagation();
+            video.play();
+            manualBtn.style.display = 'none';
+        };
+
+        video.onplay = function() {
+            if (manualBtn.style.display === 'block') {
+                manualBtn.style.display = 'none';
+            }
+        };
 
         video.load();
 
         video.addEventListener('click', (e) => {
             e.stopPropagation();
+        });
+
+        // 清理定时器（可选，但一般不需要）
+        window.addEventListener('unload', function() {
+            if (memeTimer) clearTimeout(memeTimer);
         });
     })();
 </script>
